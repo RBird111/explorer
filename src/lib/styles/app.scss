@@ -1,0 +1,54 @@
+/* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+
+html {
+	@include txt-main;
+
+	cursor: default;
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	background-color: $c-background;
+	color: $c-main;
+
+	overflow: hidden;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: transparent;
+	color: inherit;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+input,
+textarea,
+select {
+	font-family: inherit;
+}
+
+input {
+	outline: none;
+	background-color: $c-dblue;
+	border: 1px solid $c-lblue;
+
+	&::placeholder {
+		color: inherit;
+	}
+}
+
+button {
+	border: none;
+	outline: none;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}

@@ -1,0 +1,32 @@
+/* Variables and mixins declared here will be available in all other SCSS files */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700&family=Shadows+Into+Light&display=swap');
+
+// Colors
+$c-main:        #f0ebd8;
+$c-acc:       	#c44056;
+$c-background:  #0d1321;
+$c-gray:        #3e5c76;
+$c-dblue:       #1d2d44;
+$c-lblue:       #748cab;
+
+// Fonts
+@mixin txt-title {
+	font-family:    'Raleway', sans-serif;
+	font-weight:    200;
+	letter-spacing: 0.1rem;
+}
+
+@mixin txt-main {
+	font-family:    'Montserrat', sans-serif;
+	font-weight:    200;
+}
+
+@mixin txt-code {
+	font-family:    'JetBrains Mono', monospace;
+	font-weight:    200;
+}
+
+@mixin txt-alt {
+	font-family:    'Shadows Into Light', cursive;
+	font-weight:    200;
+}
