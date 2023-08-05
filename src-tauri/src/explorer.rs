@@ -1,43 +1,56 @@
-use std::{fs::DirEntry, path::Path};
 use serde::Serialize;
+use std::{fs::DirEntry, path::Path};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Dir {
-    pub directory: String,
+    pub dir: String,
     pub files: Vec<Entry>,
 }
 
 impl Dir {
     pub fn new() -> Self {
-        let dir = std::env::current_dir().expect("Can't find current directory");
+        // let directory = std::env::current_dir().expect("Can't find current directory");
+        let home = std::env::var("HOME").expect("Error reading $HOME");
+        println!("Home => {home}");
+        let directory = Path::new(&home);
 
-        let directory = dir.to_string_lossy().to_string();
+        let dir = directory.to_string_lossy().to_string();
         let mut files = vec![];
 
-        for entry_result in dir.read_dir().expect("Can't read contents of directory") {
+        for entry_result in directory
+            .read_dir()
+            .expect("Can't read contents of directory")
+        {
             let entry = entry_result.expect("Error reading entry");
-            files.push(Entry::new(entry))
+            files.push(Entry::new(entry));
         }
 
-        Self { directory, files }
+        files.sort_unstable_by(|a, b| a.file_type.cmp(&b.file_type));
+
+        Self { dir, files }
     }
 
     pub fn update(&self, file: &str) -> Self {
         let file = Path::new(file);
         if file.is_dir() {
-            let dir = std::env::current_dir()
+            let directory = std::env::current_dir()
                 .expect("Can't find current directory")
                 .join(file);
 
-            let directory = dir.to_string_lossy().to_string();
+            let dir = directory.to_string_lossy().to_string();
             let mut files = vec![];
 
-            for entry_result in dir.read_dir().expect("Can't read contents of directory") {
+            for entry_result in directory
+                .read_dir()
+                .expect("Can't read contents of directory")
+            {
                 let entry = entry_result.expect("Error reading entry");
                 files.push(Entry::new(entry))
             }
 
-            return Self { directory, files };
+            files.sort_unstable_by(|a, b| a.file_type.cmp(&b.file_type));
+
+            return Self { dir, files };
         }
 
         self.clone()
