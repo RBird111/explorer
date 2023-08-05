@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Directory } from '$lib';
+	import { type Directory, typewriter } from '$lib';
 
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { onMount } from 'svelte';
@@ -19,14 +19,17 @@
 
 <div class="wrap">
 	{#if directory}
-		<div class="directory">
-			{directory.dir}
-		</div>
+		{#key directory.dir}
+			<div class="directory" in:typewriter={{ speed: 6 }}>
+				{directory.dir}
+			</div>
+		{/key}
 
 		<div class="files">
 			<button class="file-icon" value="What" on:click={goUp}>
 				<File file={{ name: '..', file_type: 'directory' }} />
 			</button>
+
 			{#each directory.files as file (file.name)}
 				<button class="file-icon" value={file.name} on:click={goDown}>
 					<File {file} />
@@ -45,6 +48,8 @@
 		grid-template-rows: 1fr 19fr;
 
 		.directory {
+			@include txt-code;
+
 			display: flex;
 			justify-content: flex-start;
 			align-items: center;
@@ -59,9 +64,9 @@
 		.files {
 			display: grid;
 			align-content: start;
-			grid-template-columns: repeat(auto-fit, minmax(19.2vw, 1fr));
+			grid-template-columns: repeat(auto-fit, 19.2vw);
 
-			overflow-y: auto;
+			overflow-y: scroll;
 		}
 	}
 </style>

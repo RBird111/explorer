@@ -8,7 +8,7 @@ pub struct Dir {
 }
 
 impl Dir {
-    /// Creates a new `Dir` instance
+    /// Creates a new `Dir` instance at `$HOME`
     pub fn new() -> Self {
         let mut new_dir = Self {
             dir: String::new(),
@@ -36,7 +36,7 @@ impl Dir {
         }
     }
 
-    /// Moves `Dir` down one level to `file: &str` (if it is a directory)
+    /// Moves `Dir` down one level to `file` (if it's a directory)
     pub fn go_down_to(&mut self, file: &str) -> Self {
         let file = Path::new(file);
         let directory = Path::new(&self.dir).join(file);

@@ -1,20 +1,44 @@
 <script lang="ts">
 	import type { OsFile } from '$lib';
+	import FileIcon from '$lib/assets/FileIcon.svelte';
+	import FolderIcon from '$lib/assets/FolderIcon.svelte';
 
 	export let file: OsFile;
+	let p: HTMLParagraphElement;
+	$: hover = false;
 
-	const getIcon = (file_type: string) =>
-		file_type === 'file' ? 'fa-regular fa-file' : 'fa-regular fa-folder';
+	const onMouseEnter = () => {
+		hover = true;
+		p.style.color = file.file_type === 'file' ? '#c44056' : '#53c97a';
+	};
+
+	const onMouseLeave = () => {
+		hover = false;
+		p.style.color = '#f0ebd8';
+	};
 </script>
 
-<div class="file">
-	<i class={getIcon(file.file_type)} />
-	<p class="file-name">{file.name}</p>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+	class="file"
+	style:cursor={file.file_type === 'file' ? 'default' : 'pointer'}
+	title={file.name}
+	on:mouseenter={onMouseEnter}
+	on:mouseleave={onMouseLeave}
+>
+	{#if file.file_type === 'file'}
+		<FileIcon {hover} />
+	{:else}
+		<FolderIcon {hover} />
+	{/if}
+
+	<p bind:this={p} class="file-name">{file.name}</p>
 </div>
 
 <style lang="scss">
 	.file {
 		@include txt-code;
+		@include std-transition;
 
 		height: 19.2vw;
 		width: 100%;
@@ -24,19 +48,11 @@
 		align-items: center;
 		justify-content: center;
 
-		border: 1px solid $c-gray;
 		overflow: hidden;
 
-		&,
-		& > * {
-			transition: all 0.4s ease-in-out;
-		}
-
-		i {
-			font-size: 6vmin;
-		}
-
 		p {
+			@include std-transition;
+
 			margin-top: 1vmin;
 			font-size: 2.4vmin;
 			text-align: center;
@@ -44,17 +60,6 @@
 			white-space: nowrap;
 			width: 90%;
 			overflow: hidden;
-		}
-	}
-
-	.file:hover {
-		i,
-		p {
-			color: $c-acc;
-		}
-
-		i {
-			transform: scale(1.3);
 		}
 	}
 </style>
