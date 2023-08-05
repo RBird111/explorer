@@ -18,8 +18,8 @@ fn go_up(state: tauri::State<AppState>) -> Dir {
 }
 
 #[tauri::command]
-fn go_down(state: tauri::State<AppState>, name: &str) -> Dir {
-    state.0.lock().unwrap().go_down_to(name)
+fn go_down(state: tauri::State<AppState>, file: &str) -> Dir {
+    state.0.lock().unwrap().go_down_to(file)
 }
 
 fn main() {

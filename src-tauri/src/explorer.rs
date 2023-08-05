@@ -8,72 +8,74 @@ pub struct Dir {
 }
 
 impl Dir {
+    /// Creates a new `Dir` instance
     pub fn new() -> Self {
+        let mut new_dir = Self {
+            dir: String::new(),
+            files: vec![],
+        };
+
         let home = std::env::var("HOME").expect("Error reading $HOME");
         let directory = Path::new(&home);
 
-        let dir = directory.to_string_lossy().to_string();
-        let mut files = vec![];
+        new_dir.sort_files(directory);
 
-        for entry_result in directory
-            .read_dir()
-            .expect("Can't read contents of directory")
-        {
-            let entry = entry_result.expect("Error reading entry");
-            files.push(Entry::new(entry));
-        }
-
-        files.sort_unstable_by(|a, b| a.file_type.cmp(&b.file_type));
-
-        Self { dir, files }
+        new_dir
     }
 
+    /// Moves `Dir` up one level (if not already at root)
     pub fn go_up(&mut self) -> Self {
-        let cur_dir = Path::new(&self.dir);
-        let directory = cur_dir.ancestors().skip(1).next().unwrap();
+        let cur_path = &self.dir.clone();
+        let cur_dir = Path::new(cur_path);
 
-        let dir = directory.to_string_lossy().to_string();
-        let mut files = vec![];
-
-        for entry_result in directory
-            .read_dir()
-            .expect("Can't read contents of directory")
-        {
-            let entry = entry_result.expect("Error reading entry");
-            files.push(Entry::new(entry));
+        if let Some(directory) = cur_dir.ancestors().skip(1).next() {
+            self.sort_files(directory);
+            self.clone()
+        } else {
+            self.clone()
         }
-
-        files.sort_unstable_by(|a, b| a.file_type.cmp(&b.file_type));
-
-        self.dir = dir;
-        self.files = files;
-        self.clone()
     }
 
+    /// Moves `Dir` down one level to `file: &str` (if it is a directory)
     pub fn go_down_to(&mut self, file: &str) -> Self {
         let file = Path::new(file);
         let directory = Path::new(&self.dir).join(file);
 
         if directory.is_dir() {
-            let dir = directory.to_string_lossy().to_string();
-            let mut files = vec![];
+            self.sort_files(&directory);
 
-            for entry_result in directory
-                .read_dir()
-                .expect("Can't read contents of directory")
-            {
-                let entry = entry_result.expect("Error reading entry");
-                files.push(Entry::new(entry))
-            }
-
-            files.sort_unstable_by(|a, b| a.file_type.cmp(&b.file_type));
-
-            self.dir = dir;
-            self.files = files;
-            return self.clone();
+            self.clone()
+        } else {
+            self.clone()
         }
+    }
 
-        self.clone()
+    /// Sorts directory entries by `Entry.file_type` (directory or file)
+    /// and then by name. Symlinks are ignored for now.
+    ///
+    /// TODO: symlinks
+    fn sort_files(&mut self, directory: &Path) {
+        let dir = directory.to_string_lossy().to_string();
+        let (mut files, mut dirs) = (vec![], vec![]);
+
+        for entry_result in directory
+            .read_dir()
+            .expect("Can't read contents of directory")
+        {
+            let entry = entry_result.expect("Error reading entry");
+            let file_type = entry.file_type().expect("Error reading file type");
+
+            if file_type.is_file() {
+                files.push(Entry::new(entry))
+            } else if file_type.is_dir() {
+                dirs.push(Entry::new(entry))
+            }
+        }
+        dirs.sort_unstable_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+        files.sort_unstable_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+
+        self.dir = dir;
+        self.files = [dirs, files].concat();
     }
 }
 

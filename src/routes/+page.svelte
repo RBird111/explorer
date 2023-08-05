@@ -8,10 +8,12 @@
 	let directory: Directory | null = null;
 
 	onMount(async () => (directory = await invoke('get_curr_directory')));
+
 	const goUp = async () => (directory = await invoke('go_up'));
+
 	const goDown = async (e: Event) => {
-		let name = (e.currentTarget as HTMLButtonElement).value;
-		directory = await invoke('go_down', { name });
+		let file = (e.currentTarget as HTMLButtonElement).value;
+		directory = await invoke('go_down', { file });
 	};
 </script>
 

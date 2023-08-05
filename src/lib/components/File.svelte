@@ -4,11 +4,7 @@
 	export let file: OsFile;
 
 	const getIcon = (file_type: string) =>
-		file_type === 'file'
-			? 'fa-regular fa-file'
-			: file_type === 'directory'
-			? 'fa-regular fa-folder'
-			: 'fa-solid fa-link';
+		file_type === 'file' ? 'fa-regular fa-file' : 'fa-regular fa-folder';
 </script>
 
 <div class="file">
@@ -31,18 +27,34 @@
 		border: 1px solid $c-gray;
 		overflow: hidden;
 
+		&,
+		& > * {
+			transition: all 0.4s ease-in-out;
+		}
+
 		i {
 			font-size: 6vmin;
 		}
 
 		p {
 			margin-top: 1vmin;
-			font-size: 2.3vmin;
+			font-size: 2.4vmin;
 			text-align: center;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			width: 90%;
 			overflow: hidden;
+		}
+	}
+
+	.file:hover {
+		i,
+		p {
+			color: $c-acc;
+		}
+
+		i {
+			transform: scale(1.3);
 		}
 	}
 </style>
