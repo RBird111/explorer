@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { Directory } from '$lib';
-	import File from '$lib/components/File.svelte';
+
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { onMount } from 'svelte';
+	import File from '$lib/components/File.svelte';
 
 	let directory: Directory | null = null;
 
-	onMount(async () => {
-		directory = await invoke('get_curr_directory');
-	});
+	onMount(async () => (directory = await invoke('get_curr_directory')));
+	const goUp = async () => (directory = await invoke('go_up'));
+	const goDown = async (e: Event) => {
+		let name = (e.currentTarget as HTMLButtonElement).value;
+		directory = await invoke('go_down', { name });
+	};
 </script>
 
 <div class="wrap">
@@ -18,9 +22,13 @@
 		</div>
 
 		<div class="files">
-			<File file={{ name: '..', file_type: 'directory' }} />
+			<button class="file-icon" value="What" on:click={goUp}>
+				<File file={{ name: '..', file_type: 'directory' }} />
+			</button>
 			{#each directory.files as file (file.name)}
-				<File {file} />
+				<button class="file-icon" value={file.name} on:click={goDown}>
+					<File {file} />
+				</button>
 			{/each}
 		</div>
 	{/if}
@@ -50,7 +58,6 @@
 			display: grid;
 			align-content: start;
 			grid-template-columns: repeat(auto-fit, minmax(19.2vw, 1fr));
-			// gap: 1vw;
 
 			overflow-y: auto;
 		}

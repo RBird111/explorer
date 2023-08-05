@@ -3,15 +3,29 @@
 pub mod explorer;
 
 use explorer::Dir;
+use std::sync::Mutex;
+
+struct AppState(Mutex<Dir>);
 
 #[tauri::command]
-fn get_curr_directory() -> Dir {
-    Dir::new()
+fn get_curr_directory(state: tauri::State<AppState>) -> Dir {
+    state.0.lock().unwrap().clone()
+}
+
+#[tauri::command]
+fn go_up(state: tauri::State<AppState>) -> Dir {
+    state.0.lock().unwrap().go_up()
+}
+
+#[tauri::command]
+fn go_down(state: tauri::State<AppState>, name: &str) -> Dir {
+    state.0.lock().unwrap().go_down_to(name)
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_curr_directory])
+        .manage(AppState(Mutex::new(Dir::new())))
+        .invoke_handler(tauri::generate_handler![get_curr_directory, go_up, go_down])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

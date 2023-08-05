@@ -29,7 +29,7 @@
 		justify-content: center;
 
 		border: 1px solid $c-gray;
-        overflow: hidden;
+		overflow: hidden;
 
 		i {
 			font-size: 6vmin;
@@ -41,7 +41,7 @@
 			text-align: center;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-            width: 90%;
+			width: 90%;
 			overflow: hidden;
 		}
 	}
