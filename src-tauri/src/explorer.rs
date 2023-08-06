@@ -1,5 +1,6 @@
 use serde::Serialize;
 use std::{fs::DirEntry, path::Path};
+use tauri::api::path;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Dir {
@@ -15,7 +16,7 @@ impl Dir {
             files: vec![],
         };
 
-        let home = std::env::var("HOME").expect("Error reading $HOME");
+        let home = path::home_dir().expect("Error trying to find HOME directory");
         let directory = Path::new(&home);
 
         new_dir.sort_files(directory);
