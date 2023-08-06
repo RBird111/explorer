@@ -7,7 +7,7 @@
 		"distDir": "../build"
 	},
 	"package": {
-		"productName": "calculator",
+		"productName": "file-view",
 		"version": "0.1.0"
 	},
 	"tauri": {
@@ -38,7 +38,7 @@
 				"icons/icon.icns",
 				"icons/icon.ico"
 			],
-			"identifier": "00-explorer",
+			"identifier": "00-file-view",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
@@ -67,7 +67,7 @@
 				"fullscreen": false,
 				"height": 600,
 				"resizable": false,
-				"title": "File Explorer",
+				"title": "File View",
 				"width": 800,
 				"decorations": false
 			}
