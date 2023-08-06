@@ -40,7 +40,7 @@ npm tauri dev
 
 ```bash
 npm tauri build
-./src-tauri/target/release/explorer
+./src-tauri/target/release/file-view
 ```
 
 ## What's it made of?
