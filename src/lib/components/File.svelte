@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { OsFile } from '$lib';
-	import FileIcon from '$lib/assets/FileIcon.svelte';
-	import FolderIcon from '$lib/assets/FolderIcon.svelte';
+	import File from '$lib/components/icons/File.svelte';
+	import Folder from '$lib/components/icons/Folder.svelte';
 
 	export let file: OsFile;
 	let p: HTMLParagraphElement;
@@ -27,9 +27,9 @@
 	on:mouseleave={onMouseLeave}
 >
 	{#if file.file_type === 'file'}
-		<FileIcon {hover} />
+		<File {hover} />
 	{:else}
-		<FolderIcon {hover} />
+		<Folder {hover} />
 	{/if}
 
 	<p bind:this={p} class="file-name">{file.name}</p>

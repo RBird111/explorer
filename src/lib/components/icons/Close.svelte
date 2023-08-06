@@ -9,10 +9,10 @@
 		cursor: pointer;
 		font-size: 18px;
 		margin: 0 10px;
-		fill: $c-background;
+		fill: var(--fill, $c-background);
 
 		&:hover {
-			fill: $c-red;
+			fill: var(--fill-hover, $c-red);
 		}
 	}
 </style>

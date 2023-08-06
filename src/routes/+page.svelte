@@ -5,9 +5,8 @@
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { onMount } from 'svelte';
 	import File from '$lib/components/File.svelte';
-	import MinIcon from '$lib/assets/MinIcon.svelte';
-	import MaxIcon from '$lib/assets/MaxIcon.svelte';
-	import CloseIcon from '$lib/assets/CloseIcon.svelte';
+	import Min from '$lib/components/icons/Min.svelte';
+	import Close from '$lib/components/icons/Close.svelte';
 
 	let directory: Directory | null = null;
 
@@ -37,16 +36,7 @@
 						appWindow.minimize();
 					}}
 				>
-					<MinIcon />
-				</button>
-
-				<button
-					class="title-button"
-					on:click={() => {
-						appWindow.maximize();
-					}}
-				>
-					<MaxIcon />
+					<Min />
 				</button>
 
 				<button
@@ -55,7 +45,7 @@
 						appWindow.close();
 					}}
 				>
-					<CloseIcon />
+					<Close />
 				</button>
 			</div>
 		</div>
@@ -108,7 +98,7 @@
 		.files {
 			display: grid;
 			align-content: start;
-			grid-template-columns: repeat(auto-fit, 19.2vw);
+			grid-template-columns: repeat(auto-fit, 19.7vw);
 
 			overflow-y: scroll;
 		}

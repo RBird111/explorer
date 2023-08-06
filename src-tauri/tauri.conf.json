@@ -18,9 +18,7 @@
 				"close": true,
 				"hide": true,
 				"show": true,
-				"maximize": true,
 				"minimize": true,
-				"unmaximize": true,
 				"unminimize": true,
 				"startDragging": true
 			}
@@ -68,7 +66,7 @@
 			{
 				"fullscreen": false,
 				"height": 600,
-				"resizable": true,
+				"resizable": false,
 				"title": "File Explorer",
 				"width": 800,
 				"decorations": false
