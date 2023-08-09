@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { OsFile } from '$lib';
+
+	import { invoke } from '@tauri-apps/api/tauri';
 	import File from '$lib/components/icons/File.svelte';
 	import Folder from '$lib/components/icons/Folder.svelte';
 
@@ -16,15 +18,24 @@
 		hover = false;
 		p.style.color = '#f0ebd8';
 	};
+
+	const readFile = async () => {
+		if (file.name !== '..') {
+			let val: string | null = await invoke('read_file', { file: file.name });
+			console.log('val =>', val);
+		}
+	};
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="file"
 	style:cursor={file.file_type === 'file' ? 'default' : 'pointer'}
 	title={file.name}
 	on:mouseenter={onMouseEnter}
 	on:mouseleave={onMouseLeave}
+	on:click={readFile}
 >
 	{#if file.file_type === 'file'}
 		<File {hover} />

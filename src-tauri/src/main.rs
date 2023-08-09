@@ -22,10 +22,27 @@ fn go_down(state: tauri::State<AppState>, file: &str) -> Dir {
     state.0.lock().unwrap().go_down_to(file)
 }
 
+#[tauri::command]
+fn read_file(state: tauri::State<AppState>, file: &str) -> Option<String> {
+    let dir = &state.0.lock().unwrap().files;
+    match dir
+        .into_iter()
+        .find_map(|ent| (ent.name == file).then(|| ent.get_content()))
+    {
+        Some(s) => s,
+        None    => None,
+    }
+}
+
 fn main() {
     tauri::Builder::default()
         .manage(AppState(Mutex::new(Dir::new())))
-        .invoke_handler(tauri::generate_handler![get_curr_directory, go_up, go_down])
+        .invoke_handler(tauri::generate_handler![
+            get_curr_directory,
+            go_up,
+            go_down,
+            read_file
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

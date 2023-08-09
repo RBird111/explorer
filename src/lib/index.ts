@@ -8,6 +8,9 @@ export type Directory = {
 	files: OsFile[];
 };
 
+/**
+ * Typewriter animation
+ */
 export function typewriter(node: HTMLElement, { speed = 1 }) {
 	const valid =
 		node.childNodes.length === 1 &&

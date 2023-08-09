@@ -1,5 +1,8 @@
 use serde::Serialize;
-use std::{fs::DirEntry, path::Path};
+use std::{
+    fs::{self, DirEntry},
+    path::Path,
+};
 use tauri::api::path;
 
 #[derive(Debug, Clone, Serialize)]
@@ -44,7 +47,6 @@ impl Dir {
 
         if directory.is_dir() {
             self.sort_files(&directory);
-
             self.clone()
         } else {
             self.clone()
@@ -84,11 +86,15 @@ impl Dir {
 pub struct Entry {
     pub name: String,
     pub file_type: String,
+
+    #[serde(skip_serializing)]
+    path: String,
 }
 
 impl Entry {
     fn new(entry: DirEntry) -> Self {
         let name = entry.file_name().to_string_lossy().to_string();
+        let path = entry.path().to_string_lossy().to_string();
         let f_type = entry.file_type().expect("Can't read file type");
 
         let file_type = if f_type.is_dir() {
@@ -99,6 +105,18 @@ impl Entry {
             "symlink".to_string()
         };
 
-        Self { name, file_type }
+        Self {
+            name,
+            file_type,
+            path,
+        }
+    }
+
+    pub fn get_content(&self) -> Option<String> {
+        if self.file_type != "file" { return None; }
+        match fs::read_to_string(&self.path) {
+            Ok(s)  => Some(s),
+            Err(_) => None,
+        }
     }
 }

@@ -51,7 +51,7 @@
 		</div>
 
 		<div class="files">
-			<button class="file-icon" value="What" on:click={goUp}>
+			<button class="file-icon" value="what" on:click={goUp}>
 				<File file={{ name: '..', file_type: 'directory' }} />
 			</button>
 
