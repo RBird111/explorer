@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { OsFile } from '$lib';
+	import { preview, type OsFile } from '$lib';
 
 	import { invoke } from '@tauri-apps/api/tauri';
 	import File from '$lib/components/icons/File.svelte';
@@ -21,8 +21,7 @@
 
 	const readFile = async () => {
 		if (file.name !== '..') {
-			let val: string | null = await invoke('read_file', { file: file.name });
-			console.log('val =>', val);
+			preview.set(await invoke('read_file', { file: file.name }));
 		}
 	};
 </script>

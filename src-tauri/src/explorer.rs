@@ -1,17 +1,17 @@
 use serde::Serialize;
-use std::{
-    fs::{self, DirEntry},
-    path::Path,
-};
+use std::{fs, path::Path};
 use tauri::api::path;
 
+/// `Directory` represents a directory in the filesystem
+///
+/// TODO: Make more condescending
 #[derive(Debug, Clone, Serialize)]
-pub struct Dir {
+pub struct Directory {
     pub dir: String,
     pub files: Vec<Entry>,
 }
 
-impl Dir {
+impl Directory {
     /// Creates a new `Dir` instance at `$HOME`
     pub fn new() -> Self {
         let mut new_dir = Self {
@@ -63,10 +63,10 @@ impl Dir {
 
         for entry_result in directory
             .read_dir()
-            .expect("Can't read contents of directory")
+            .expect("error reading contents of directory")
         {
-            let entry = entry_result.expect("Error reading entry");
-            let file_type = entry.file_type().expect("Error reading file type");
+            let entry = entry_result.expect("error reading entry");
+            let file_type = entry.file_type().expect("error reading file type");
 
             if file_type.is_file() {
                 files.push(Entry::new(entry))
@@ -82,6 +82,7 @@ impl Dir {
     }
 }
 
+/// `Entry` represents an item present in `Directory`
 #[derive(Debug, Clone, Serialize)]
 pub struct Entry {
     pub name: String,
@@ -92,18 +93,18 @@ pub struct Entry {
 }
 
 impl Entry {
-    fn new(entry: DirEntry) -> Self {
+    /// Creates a new instance of `Entry`
+    pub fn new(entry: fs::DirEntry) -> Self {
         let name = entry.file_name().to_string_lossy().to_string();
         let path = entry.path().to_string_lossy().to_string();
-        let f_type = entry.file_type().expect("Can't read file type");
+        let f_type = entry.file_type().expect("error reading file type");
 
-        let file_type = if f_type.is_dir() {
-            "directory".to_string()
-        } else if f_type.is_file() {
-            "file".to_string()
-        } else {
-            "symlink".to_string()
-        };
+        let file_type = match f_type {
+            f if f.is_dir()  => "directory",
+            f if f.is_file() => "file",
+            _else_symlink    => "symlink",
+        }
+        .to_string();
 
         Self {
             name,
@@ -112,8 +113,10 @@ impl Entry {
         }
     }
 
+    /// If `Entry` has a `file_type` of `"file"` read its contents
+    /// into a `String` and return to caller
     pub fn get_content(&self) -> Option<String> {
-        if self.file_type != "file" { return None; }
+        if self.file_type != "file" { return None }
         match fs::read_to_string(&self.path) {
             Ok(s)  => Some(s),
             Err(_) => None,

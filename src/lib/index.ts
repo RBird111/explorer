@@ -1,3 +1,5 @@
+import { writable } from 'svelte/store';
+
 export type OsFile = {
 	name: string;
 	file_type: 'directory' | 'file' | 'symlink';
@@ -7,6 +9,8 @@ export type Directory = {
 	dir: string;
 	files: OsFile[];
 };
+
+export const preview = writable(null)
 
 /**
  * Typewriter animation

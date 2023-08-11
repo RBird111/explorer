@@ -2,23 +2,23 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 pub mod explorer;
 
-use explorer::Dir;
+use explorer::Directory;
 use std::sync::Mutex;
 
-struct AppState(Mutex<Dir>);
+struct AppState(Mutex<Directory>);
 
 #[tauri::command]
-fn get_curr_directory(state: tauri::State<AppState>) -> Dir {
+fn get_curr_directory(state: tauri::State<AppState>) -> Directory {
     state.0.lock().unwrap().clone()
 }
 
 #[tauri::command]
-fn go_up(state: tauri::State<AppState>) -> Dir {
+fn go_up(state: tauri::State<AppState>) -> Directory {
     state.0.lock().unwrap().go_up()
 }
 
 #[tauri::command]
-fn go_down(state: tauri::State<AppState>, file: &str) -> Dir {
+fn go_down(state: tauri::State<AppState>, file: &str) -> Directory {
     state.0.lock().unwrap().go_down_to(file)
 }
 
@@ -36,7 +36,7 @@ fn read_file(state: tauri::State<AppState>, file: &str) -> Option<String> {
 
 fn main() {
     tauri::Builder::default()
-        .manage(AppState(Mutex::new(Dir::new())))
+        .manage(AppState(Mutex::new(Directory::new())))
         .invoke_handler(tauri::generate_handler![
             get_curr_directory,
             go_up,

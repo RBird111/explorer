@@ -7,6 +7,7 @@
 	import File from '$lib/components/File.svelte';
 	import Min from '$lib/components/icons/Min.svelte';
 	import Close from '$lib/components/icons/Close.svelte';
+	import Preview from '$lib/components/Preview.svelte';
 
 	let directory: Directory | null = null;
 
@@ -61,6 +62,8 @@
 				</button>
 			{/each}
 		</div>
+
+		<Preview />
 	{/if}
 </div>
 
@@ -70,7 +73,7 @@
 		height: 100vh;
 
 		display: grid;
-		grid-template-rows: 1fr 19fr;
+		grid-template-rows: 30px 1fr;
 
 		.title-bar {
 			@include txt-code;
@@ -99,6 +102,7 @@
 			display: grid;
 			align-content: start;
 			grid-template-columns: repeat(auto-fit, 19.7vw);
+			// border: 1px solid red;
 
 			overflow-y: scroll;
 		}
