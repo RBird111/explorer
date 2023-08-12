@@ -8,6 +8,7 @@
 	import Min from '$lib/components/icons/Min.svelte';
 	import Close from '$lib/components/icons/Close.svelte';
 	import Preview from '$lib/components/Preview.svelte';
+	import Max from '$lib/components/icons/Max.svelte';
 
 	let directory: Directory | null = null;
 
@@ -31,13 +32,15 @@
 			{/key}
 
 			<div class="title-buttons">
+				<button class="title-button" on:click={() => appWindow.minimize()}>
+					<Min />
+				</button>
+
 				<button
 					class="title-button"
-					on:click={() => {
-						appWindow.minimize();
-					}}
+					on:click={async () => appWindow.toggleMaximize()}
 				>
-					<Min />
+					<Max />
 				</button>
 
 				<button
@@ -94,6 +97,7 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
+					margin: 0 5px;
 				}
 			}
 		}
@@ -102,7 +106,6 @@
 			display: grid;
 			align-content: start;
 			grid-template-columns: repeat(auto-fit, 19.7vw);
-			// border: 1px solid red;
 
 			overflow-y: scroll;
 		}

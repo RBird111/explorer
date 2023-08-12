@@ -22,6 +22,8 @@
 
 <style lang="scss">
 	.wrap {
+		@include txt-code;
+
         visibility: hidden;
 
 		position: absolute;

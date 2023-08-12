@@ -14,13 +14,15 @@
 		"allowlist": {
 			"all": false,
 			"window": {
-				"all": false,
-				"close": true,
-				"hide": true,
-				"show": true,
-				"minimize": true,
-				"unminimize": true,
-				"startDragging": true
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
 			}
 		},
 		"bundle": {
@@ -66,7 +68,7 @@
 			{
 				"fullscreen": false,
 				"height": 600,
-				"resizable": false,
+				"resizable": true,
 				"title": "File View",
 				"width": 800,
 				"decorations": false

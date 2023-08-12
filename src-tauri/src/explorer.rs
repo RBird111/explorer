@@ -74,6 +74,7 @@ impl Directory {
                 dirs.push(Entry::new(entry))
             }
         }
+
         dirs.sort_unstable_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
         files.sort_unstable_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
 
@@ -117,9 +118,6 @@ impl Entry {
     /// into a `String` and return to caller
     pub fn get_content(&self) -> Option<String> {
         if self.file_type != "file" { return None }
-        match fs::read_to_string(&self.path) {
-            Ok(s)  => Some(s),
-            Err(_) => None,
-        }
+        fs::read_to_string(&self.path).ok()
     }
 }
