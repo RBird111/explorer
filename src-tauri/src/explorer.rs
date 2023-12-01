@@ -34,10 +34,8 @@ impl Directory {
 
         if let Some(directory) = cur_dir.ancestors().skip(1).next() {
             self.sort_files(directory);
-            self.clone()
-        } else {
-            self.clone()
         }
+        self.clone()
     }
 
     /// Moves `Dir` down one level to `file` (if it's a directory)
@@ -47,10 +45,8 @@ impl Directory {
 
         if directory.is_dir() {
             self.sort_files(&directory);
-            self.clone()
-        } else {
-            self.clone()
         }
+        self.clone()
     }
 
     /// Sorts directory entries by `Entry.file_type` (directory or file)
@@ -117,7 +113,9 @@ impl Entry {
     /// If `Entry` has a `file_type` of `"file"` read its contents
     /// into a `String` and return to caller
     pub fn get_content(&self) -> Option<String> {
-        if self.file_type != "file" { return None }
+        if self.file_type != "file" {
+            return None;
+        }
         fs::read_to_string(&self.path).ok()
     }
 }
